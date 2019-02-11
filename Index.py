@@ -33,7 +33,7 @@ def dates2dic(dates):
     return dic
 
 def parseBusStops(data):
-    return data[0].split(" N ") 
+    return data[0].replace(" + ", " N ").split(" N ")
 
 def fillHoraire(reseau, data):
     for i in range(1, 6):

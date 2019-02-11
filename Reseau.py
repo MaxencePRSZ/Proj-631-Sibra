@@ -40,6 +40,7 @@ class Reseau:
         for busStop in self.listBusStop:
             for key in dic.keys():
                 if key == busStop.name:
+                    
                     busStop.addHoraire(dic.get(key), typeHoraire)
                     break;
         
