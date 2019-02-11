@@ -16,23 +16,24 @@ class Reseau:
         self.countLigne +=1
         
     def addBusStops(self, busStops, numLigne):
+        listTampon = []
         for i in busStops:
             exist = False
             for existingStops in self.listBusStop:
                 if i == existingStops.name:
                     exist = True
+                    existingStops.addLigne(numLigne)
             if not exist :
                 busStop = BusStop()
                 busStop.setName(i)
                 busStop.addLigne(numLigne)
-                self.listBusStop.append(busStop)
-            else :
-                
-        self.fillListTrajet(numLigne)
+                listTampon.append(busStop)                
+        self.fillListTrajet(numLigne, listTampon)
+        self.listBusStop += listTampon
         
-    def fillListTrajet(self, idLigne):
-        for i in range(len(self.listBusStop)-1):
-            trajet = Trajet(idLigne, self.listBusStop[i], self.listBusStop[i+1])
+    def fillListTrajet(self, idLigne, listBusStop):
+        for i in range(len(listBusStop)-1):
+            trajet = Trajet(idLigne, listBusStop[i], listBusStop[i+1])
             self.listTrajet.append(trajet)
             
     def fillHoraires(self, dic, typeHoraire):
@@ -43,4 +44,7 @@ class Reseau:
                     break;
         
     def getBusStopByName(self, name):
-        return
+        for i in self.listBusStop:
+            if i.name == name:
+                return i
+        return None
