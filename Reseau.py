@@ -49,3 +49,40 @@ class Reseau:
             if i.name == name:
                 return i
         return None
+    
+    
+    def breadthFirstSearch(self, depart):
+#        Créer la liste des busStop visités
+        visited = [False] * len(self.listBusStop)
+#        Créer la liste des busStop à visiter (vide pour le moment)
+        queue = []
+#        Le noeud de départ doit être dans visité
+        queue.append(depart)
+        visited[0] = True
+      
+    def getNeighbors(self, busStop):
+        return 
+        
+# =============================================================================
+# https://dev.to/mxl/dijkstras-algorithm-in-python-algorithms-for-beginners-dkc
+# =============================================================================
+    def djikstra(self, depart, arrivee):
+        distances = {busStop: float("inf") for busStop in self.listBusStop}
+        precedents = {busStop: None for busStop in self.listBusStop}
+        distances[depart] = 0
+        busStops = self.listBusStop
+        
+        while busStops:
+            
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
