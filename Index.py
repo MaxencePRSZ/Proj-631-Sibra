@@ -61,6 +61,7 @@ data_file_name2 = 'data/2_Piscine-Patinoire_Campus.txt'
 reseau = Reseau()
 addLigneFromtxt(reseau, data_file_name1)
 addLigneFromtxt(reseau, data_file_name2)
+reseau.djikstra(reseau.listBusStop[1], reseau.listBusStop[1])
 
 
 

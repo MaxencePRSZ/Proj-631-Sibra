@@ -82,9 +82,10 @@ class Reseau:
         distances[depart] = 0
         busStops = self.listBusStop
         
-#        while busStops:
-            
-        
+        while busStops:
+            current_busStop = min(busStops, key=lambda busStop: distances[busStop] )
+            print(current_busStop.name)
+            break
         
         
         
