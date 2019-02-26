@@ -1,5 +1,6 @@
 from BusStop import BusStop
 from Trajet import Trajet
+from collections import OrderedDict
 # -*- coding: utf-8 -*-
 
 class Reseau:
@@ -19,10 +20,11 @@ class Reseau:
         listTampon = []
         for i in busStops:
             exist = False
-            for existingStops in self.listBusStop:
-                if i == existingStops.name:
+            for existingStop in self.listBusStop:
+                if i == existingStop.name:
                     exist = True
-                    existingStops.addLigne(numLigne)
+                    existingStop.addLigne(numLigne)
+                    listTampon.append(existingStop)
             if not exist :
                 busStop = BusStop()
                 busStop.setName(i)
@@ -30,6 +32,7 @@ class Reseau:
                 listTampon.append(busStop)                
         self.fillListTrajet(numLigne, listTampon)
         self.listBusStop += listTampon
+        self.listBusStop = list(OrderedDict.fromkeys(self.listBusStop))
         
     def fillListTrajet(self, idLigne, listBusStop):
         for i in range(len(listBusStop)-1):
@@ -60,9 +63,14 @@ class Reseau:
         queue.append(depart)
         visited[0] = True
       
-#        TODO
     def getNeighbors(self, busStop):
-        return 
+        ret = []
+        for i in self.listTrajet:
+            if busStop == i.busStop1 or busStop == i.busStop2:
+                ret.append(i.busStop1)
+                ret.append(i.busStop2)
+        ret = set(ret) - set([busStop])
+        return ret
 
         
 # =============================================================================
@@ -74,7 +82,7 @@ class Reseau:
         distances[depart] = 0
         busStops = self.listBusStop
         
-        while busStops:
+#        while busStops:
             
         
         
