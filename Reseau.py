@@ -69,7 +69,7 @@ class Reseau:
             if busStop == i.busStop1 or busStop == i.busStop2:
                 ret.append(i.busStop1)
                 ret.append(i.busStop2)
-        ret = set(ret) - set([busStop])
+        ret = list(set(ret) - set([busStop]))
         return ret
 
         
@@ -84,8 +84,30 @@ class Reseau:
         
         while busStops:
             current_busStop = min(busStops, key=lambda busStop: distances[busStop] )
-            print(current_busStop.name)
-            break
+            
+#           test if the shortest distance among the unvisited busStop is inf
+#           If yes, then break and let's pursue the algorithm with another BS
+            if distances[current_busStop] == float("inf"):
+                break
+            
+#           
+            for i in self.getNeighbors(current_busStop):
+                new_value = distances[current_busStop] + 1
+                
+                if new_value < distances[i]:
+                    distances[i] = new_value
+                    precedents[i] = current_busStop
+                    
+            busStops.remove(current_busStop)
+        
+        ret = []
+        busStop = arrivee
+        print(precedents)
+        while precedents[busStop] is not None:
+            ret.append(busStop.name)
+            busStop = precedents[busStop]
+        ret.append(depart.name)
+        return ret
         
         
         
