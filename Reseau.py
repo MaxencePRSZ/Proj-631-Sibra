@@ -1,6 +1,8 @@
 from BusStop import BusStop
 from Trajet import Trajet
 from collections import OrderedDict
+from datetime import datetime
+
 # -*- coding: utf-8 -*-
 
 class Reseau:
@@ -9,6 +11,7 @@ class Reseau:
         self.listBusStop = []
         self.listTrajet = []
         self.countLigne = 0
+    MAXTIME = datetime.strptime("23:33", "%H:%M")
             
     def getCountLigne(self):
         return self.countLigne
@@ -72,6 +75,12 @@ class Reseau:
         ret = list(set(ret) - set([busStop]))
         return ret
 
+    def findMinDateTime(self, dicTime):
+        mini = self.MAXTIME
+        for key, value in dicTime:
+            if value < mini:
+                mini = value
+        return mini
         
 # =============================================================================
 # https://dev.to/mxl/dijkstras-algorithm-in-python-algorithms-for-beginners-dkc
@@ -81,25 +90,18 @@ class Reseau:
         precedents = {busStop: None for busStop in self.listBusStop}
         distances[depart] = 0
         busStops = self.listBusStop.copy()
-        
         while busStops:
-            current_busStop = min(busStops, key=lambda busStop: distances[busStop] )
-            
+            current_busStop = min(busStops, key=lambda busStop: distances[busStop] )    
 #           test if the shortest distance among the unvisited busStop is inf
 #           If yes, then break and let's pursue the algorithm with another BS
             if distances[current_busStop] == float("inf"):
-                break
-            
-#           
+                break    
             for i in self.getNeighbors(current_busStop):
-                new_value = distances[current_busStop] + 1
-                
+                new_value = distances[current_busStop] + 1        
                 if new_value < distances[i]:
                     distances[i] = new_value
-                    precedents[i] = current_busStop
-                    
+                    precedents[i] = current_busStop            
             busStops.remove(current_busStop)
-        
         ret = []
         busStop = arrivee
         while precedents[busStop] is not None:
@@ -110,12 +112,10 @@ class Reseau:
         
         
     def djikstraFastest(self, depart, arrivee, heure):
-        distances = {busStop: float("inf") for busStop in self.listBusStop}
+        distances = {busStop: datetime.max for busStop in self.listBusStop}
         precedents = {busStop: None for busStop in self.listBusStop}
-        distances[depart] = depart.listHoraires[0]
-        
-        
-        
+        typeHoraire, indice = depart.findTypeHoraire(arrivee, heure)
+        distances[depart] = depart.listHoraires[typeHoraire].listHoraire[indice]
         
         busStops = self.listBusStop
         
@@ -124,12 +124,11 @@ class Reseau:
             
 #           test if the shortest distance among the unvisited busStop is inf
 #           If yes, then break and let's pursue the algorithm with another BS
-            if distances[current_busStop] == float("inf"):
+            if distances[current_busStop] == datetime.datetime.max:
                 break
             
-#           
             for i in self.getNeighbors(current_busStop):
-                new_value = distances[current_busStop] + 1
+                new_value = datetime.strptime(i.listHoraires[typeHoraire].listHoraire[indice], '%H:%M')
                 
                 if new_value < distances[i]:
                     distances[i] = new_value
