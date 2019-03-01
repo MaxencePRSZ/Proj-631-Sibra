@@ -1,5 +1,6 @@
 from Reseau import Reseau
-
+from GUI import GUI
+from tkinter import Tk
 
 #!/usr/bin/python3
 #-*-coding:utf-8-*-
@@ -61,8 +62,19 @@ data_file_name2 = 'data/2_Piscine-Patinoire_Campus.txt'
 reseau = Reseau()
 addLigneFromtxt(reseau, data_file_name1)
 addLigneFromtxt(reseau, data_file_name2)
-print(reseau.djikstra(reseau.listBusStop[6], reseau.listBusStop[9]))
-print(reseau.djikstraFastest(reseau.listBusStop[6], reseau.listBusStop[9], "10:00"))
+#print(reseau.djikstra(reseau.listBusStop[6], reseau.listBusStop[9]))
+print(reseau.djikstraFastest(reseau.listBusStop[1], reseau.listBusStop[4], "10:00"))
+
+# =============================================================================
+#           INTERFACE UTILISATEUR
+# =============================================================================
+
+root = Tk()
+ww = GUI(root)
+for count, i in enumerate(reseau.listBusStop):
+    ww.listBox1.insert(count, i.name)
+ww.listBox1.pack()
+#root.mainloop()
 
 
 

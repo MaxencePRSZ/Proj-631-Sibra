@@ -1,7 +1,7 @@
 from BusStop import BusStop
 from Trajet import Trajet
 from collections import OrderedDict
-from datetime import datetime
+from datetime import datetime, timedelta
 
 # -*- coding: utf-8 -*-
 
@@ -11,7 +11,7 @@ class Reseau:
         self.listBusStop = []
         self.listTrajet = []
         self.countLigne = 0
-    MAXTIME = datetime.strptime("23:33", "%H:%M")
+    MAXTIME = datetime.strptime("23:59", "%H:%M")
             
     def getCountLigne(self):
         return self.countLigne
@@ -46,7 +46,6 @@ class Reseau:
         for busStop in self.listBusStop:
             for key in dic.keys():
                 if key == busStop.name:
-                    
                     busStop.addHoraire(dic.get(key), typeHoraire)
                     break;
         
@@ -75,12 +74,24 @@ class Reseau:
         ret = list(set(ret) - set([busStop]))
         return ret
 
-    def findMinDateTime(self, dicTime):
+    def findMinDateTime(self, dicTime, busStops):
         mini = self.MAXTIME
-        for key, value in dicTime:
-            if value < mini:
+        busStop = None
+        passe = False
+        for key, value in dicTime.items():
+            for i in busStops:
+                if i == key:
+                    passe = True
+            if passe:
+                continue
+            if type(value) is str:
+                value = datetime.strptime(value, "%H:%M")
+            print(value, mini)
+            if value <= mini :
                 mini = value
-        return mini
+                busStop = key
+        print(busStop.name)
+        return (busStop, mini)
         
 # =============================================================================
 # https://dev.to/mxl/dijkstras-algorithm-in-python-algorithms-for-beginners-dkc
@@ -91,7 +102,8 @@ class Reseau:
         distances[depart] = 0
         busStops = self.listBusStop.copy()
         while busStops:
-            current_busStop = min(busStops, key=lambda busStop: distances[busStop] )    
+            current_busStop = min(busStops, key=lambda busStop: distances[busStop])
+            print(len(distances), len(busStops))
 #           test if the shortest distance among the unvisited busStop is inf
 #           If yes, then break and let's pursue the algorithm with another BS
             if distances[current_busStop] == float("inf"):
@@ -112,33 +124,31 @@ class Reseau:
         
         
     def djikstraFastest(self, depart, arrivee, heure):
-        distances = {busStop: datetime.max for busStop in self.listBusStop}
+        distances = {busStop: self.MAXTIME for busStop in self.listBusStop}
         precedents = {busStop: None for busStop in self.listBusStop}
         typeHoraire, indice = depart.findTypeHoraire(arrivee, heure)
         distances[depart] = depart.listHoraires[typeHoraire].listHoraire[indice]
         
-        busStops = self.listBusStop
-        
-        while busStops:
-            current_busStop = min(busStops, key=lambda busStop: distances[busStop] )
-            
+        busStops = []
+        while len(busStops) != len(distances):
+            current_busStop = self.findMinDateTime(distances, busStops)[0]
 #           test if the shortest distance among the unvisited busStop is inf
 #           If yes, then break and let's pursue the algorithm with another BS
-            if distances[current_busStop] == datetime.datetime.max:
+            if distances[current_busStop] == self.MAXTIME:
                 break
             
             for i in self.getNeighbors(current_busStop):
-                new_value = datetime.strptime(i.listHoraires[typeHoraire].listHoraire[indice], '%H:%M')
-                
+                if i.listHoraires[typeHoraire].listHoraire[indice] == "-":
+                    new_value = distances[current_busStop] + timedelta(seconds=6)
+                else:
+                    new_value = i.listHoraires[typeHoraire].listHoraire[indice]
                 if new_value < distances[i]:
                     distances[i] = new_value
                     precedents[i] = current_busStop
-                    
-            busStops.remove(current_busStop)
+            busStops.append(current_busStop)
         
         ret = []
         busStop = arrivee
-        print(precedents)
         while precedents[busStop] is not None:
             ret.append(busStop)
             busStop = precedents[busStop]

@@ -24,9 +24,9 @@ class BusStop:
         print(range(len(self.listHoraires)-1))
         for i in range(len(self.listHoraires)):
             indic = self.listHoraires[i].findIndice(heure)
-            datetime.strptime(self.listHoraires[i].listHoraire[indic], '%H:%M')
+            self.listHoraires[i].listHoraire[indic]
             print("Depart : " + str(self.listHoraires[i].listHoraire[indic]))
             print("Arrivee : " + str(arrivee.listHoraires[i].listHoraire[indic]))
-            if datetime.strptime(arrivee.listHoraires[i].listHoraire[indic], '%H:%M') > datetime.strptime(self.listHoraires[i].listHoraire[indic], '%H:%M'):
+            if arrivee.listHoraires[i].listHoraire[indic] > self.listHoraires[i].listHoraire[indic]:
                 return (i, indic)
             
