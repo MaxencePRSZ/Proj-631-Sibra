@@ -21,12 +21,8 @@ class BusStop:
         self.listHoraires.append(horaire)
         
     def findTypeHoraire(self, arrivee, heure):
-        print(range(len(self.listHoraires)-1))
         for i in range(len(self.listHoraires)):
             indic = self.listHoraires[i].findIndice(heure)
-            self.listHoraires[i].listHoraire[indic]
-            print("Depart : " + str(self.listHoraires[i].listHoraire[indic]))
-            print("Arrivee : " + str(arrivee.listHoraires[i].listHoraire[indic]))
             if arrivee.listHoraires[i].listHoraire[indic] > self.listHoraires[i].listHoraire[indic]:
                 return (i, indic)
             

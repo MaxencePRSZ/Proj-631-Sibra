@@ -54,16 +54,6 @@ class Reseau:
             if i.name == name:
                 return i
         return None
-    
-    
-    def breadthFirstSearch(self, depart):
-#        Créer la liste des busStop visités
-        visited = [False] * len(self.listBusStop)
-#        Créer la liste des busStop à visiter (vide pour le moment)
-        queue = []
-#        Le noeud de départ doit être dans visité
-        queue.append(depart)
-        visited[0] = True
       
     def getNeighbors(self, busStop):
         ret = []
@@ -75,9 +65,8 @@ class Reseau:
         return ret
 
     def findMinDateTime(self, dicTime, busStops):
-        mini = self.MAXTIME
-        busStop = None
-        passe = False
+        mini, busStop, passe = self.MAXTIME, None, False
+        
         for key, value in dicTime.items():
             for i in busStops:
                 if i == key:
@@ -85,8 +74,6 @@ class Reseau:
             if passe:
                 passe = False
                 continue
-            if type(value) is str:
-                value = datetime.strptime(value, "%H:%M")
             if value <= mini :
                 mini = value
                 busStop = key
@@ -130,13 +117,17 @@ class Reseau:
         busStops = []
         
         while len(busStops) != len(distances):
-            current_busStop = self.findMinDateTime(distances, busStops)[0]
+            current_busStop, current_horaire = self.findMinDateTime(distances, busStops)
             if distances[current_busStop] == self.MAXTIME:
                 break
             
             for i in self.getNeighbors(current_busStop):
+                
+#               Si on rencontre un horaire '-', on prétend que le bus y passera
+#               dans un certain temps - à mieux gérer si j'ai le temps
                 if i.listHoraires[typeHoraire].listHoraire[indice] == "-":
                     new_value = distances[current_busStop] + timedelta(seconds=6)
+                    
                 else:
                     new_value = i.listHoraires[typeHoraire].listHoraire[indice]
                 if new_value < distances[i]:
@@ -147,9 +138,9 @@ class Reseau:
         ret = []
         busStop = arrivee
         while precedents[busStop] is not None:
-            ret.append(busStop.name)
+            ret.append(busStop)
             busStop = precedents[busStop]
-        ret.append(depart.name)
+        ret.append(depart)
         return list(reversed(ret))
         
         
