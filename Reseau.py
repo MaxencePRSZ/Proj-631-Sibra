@@ -83,14 +83,13 @@ class Reseau:
                 if i == key:
                     passe = True
             if passe:
+                passe = False
                 continue
             if type(value) is str:
                 value = datetime.strptime(value, "%H:%M")
-            print(value, mini)
             if value <= mini :
                 mini = value
                 busStop = key
-        print(busStop.name)
         return (busStop, mini)
         
 # =============================================================================
@@ -128,12 +127,10 @@ class Reseau:
         precedents = {busStop: None for busStop in self.listBusStop}
         typeHoraire, indice = depart.findTypeHoraire(arrivee, heure)
         distances[depart] = depart.listHoraires[typeHoraire].listHoraire[indice]
-        
         busStops = []
+        
         while len(busStops) != len(distances):
             current_busStop = self.findMinDateTime(distances, busStops)[0]
-#           test if the shortest distance among the unvisited busStop is inf
-#           If yes, then break and let's pursue the algorithm with another BS
             if distances[current_busStop] == self.MAXTIME:
                 break
             
@@ -150,9 +147,9 @@ class Reseau:
         ret = []
         busStop = arrivee
         while precedents[busStop] is not None:
-            ret.append(busStop)
+            ret.append(busStop.name)
             busStop = precedents[busStop]
-        ret.append(depart)
+        ret.append(depart.name)
         return list(reversed(ret))
         
         
