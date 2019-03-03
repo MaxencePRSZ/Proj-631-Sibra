@@ -12,11 +12,12 @@ class Horaire:
         self.listHoraire = listHoraire
         
     def findIndice(self, heure):
-        hour = datetime.strptime(heure, '%H:%M')
+        if type(heure) == str:
+            heure = datetime.strptime(heure, '%H:%M')
         for count, i in enumerate(self.listHoraire):
             if i == "-":
                 continue
-            if hour <= i:
+            if heure <= i:
                 return count
         return None
     

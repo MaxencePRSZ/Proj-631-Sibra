@@ -63,7 +63,7 @@ reseau = Reseau()
 addLigneFromtxt(reseau, data_file_name1)
 addLigneFromtxt(reseau, data_file_name2)
 #print(reseau.djikstra(reseau.listBusStop[6], reseau.listBusStop[9]))
-print(reseau.djikstraFastest(reseau.listBusStop[1], reseau.listBusStop[4], "10:00"))
+print(reseau.djikstraFastest(reseau.listBusStop[4], reseau.listBusStop[20], "10:00"))
 
 # =============================================================================
 #           INTERFACE UTILISATEUR

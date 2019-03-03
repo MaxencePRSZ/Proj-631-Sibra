@@ -18,7 +18,7 @@ class Reseau:
     
     def incrementCountLigne(self):
         self.countLigne +=1
-        
+                
     def addBusStops(self, busStops, numLigne):
         listTampon = []
         for i in busStops:
@@ -108,8 +108,7 @@ class Reseau:
         distances = {busStop: self.MAXTIME for busStop in self.listBusStop}
         precedents = {busStop: None for busStop in self.listBusStop}
         typeHoraire, indice = depart.findTypeHoraire(arrivee, heure)
-#        dictLigne = dict({depart.idLignes : (indice, typeHoraire)})
-
+        dictLigne = dict({idLigne : (indice, typeHoraire) for idLigne in depart.idLignes})
         distances[depart] = depart.listHoraires[typeHoraire].listHoraire[indice]
         busStops = []
         
@@ -121,33 +120,31 @@ class Reseau:
             for i in self.getNeighbors(current_busStop):
 #               Si on rencontre un horaire '-', on prétend que le bus y passera
 #               dans un certain temps - à mieux gérer si j'ai le temps
+                if len(current_busStop.idLignes) > 1:
+                    for j in current_busStop.idLignes:
+                        if j not in list(dictLigne.keys()):
+                            th, ind = current_busStop.findTypeHoraire(arrivee, distances[current_busStop])
+                            dictLigne.update({j : (ind, th)})
+                            
+                ind_voisin, tH_voisin = dictLigne[i.idLignes[0]]
                 
-#                ind_Current, tH_Current = dictLigne[i.idLignes[0]]
-                if i.listHoraires[typeHoraire].listHoraire[indice] == "-":
+                if i.listHoraires[tH_voisin].listHoraire[ind_voisin] == "-":
                     new_value = distances[current_busStop] + timedelta(seconds=6)
                     
                 else:
-                    new_value = i.listHoraires[typeHoraire].listHoraire[indice]
+                    new_value = i.listHoraires[tH_voisin].listHoraire[ind_voisin]
                 if new_value < distances[i]:
                     distances[i] = new_value
                     precedents[i] = current_busStop
             busStops.append(current_busStop)
         
-        ret = []
-        ret2 = []
+        ret = {}
         busStop = arrivee
         while precedents[busStop] is not None:
-            ret.append(busStop.name)
-            ret2.append(distances[busStop])
+            ret.update({busStop.name : str(distances[busStop].time())})
             busStop = precedents[busStop]
-        ret.append(depart.name)
-        ret2.append(distances[depart])
-        return (list(reversed(ret)),list(reversed(ret2)))
-        
-        
-        
-        
-        
+        ret.update({depart.name : str(distances[depart].time())})
+        return ret
         
         
         
