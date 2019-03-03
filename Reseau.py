@@ -65,14 +65,9 @@ class Reseau:
         return ret
 
     def findMinDateTime(self, dicTime, busStops):
-        mini, busStop, passe = self.MAXTIME, None, False
-        
+        mini, busStop = self.MAXTIME, None
         for key, value in dicTime.items():
-            for i in busStops:
-                if i == key:
-                    passe = True
-            if passe:
-                passe = False
+            if key in busStops:
                 continue
             if value <= mini :
                 mini = value
@@ -113,6 +108,8 @@ class Reseau:
         distances = {busStop: self.MAXTIME for busStop in self.listBusStop}
         precedents = {busStop: None for busStop in self.listBusStop}
         typeHoraire, indice = depart.findTypeHoraire(arrivee, heure)
+#        dictLigne = dict({depart.idLignes : (indice, typeHoraire)})
+
         distances[depart] = depart.listHoraires[typeHoraire].listHoraire[indice]
         busStops = []
         
@@ -122,9 +119,10 @@ class Reseau:
                 break
             
             for i in self.getNeighbors(current_busStop):
-                
 #               Si on rencontre un horaire '-', on prétend que le bus y passera
 #               dans un certain temps - à mieux gérer si j'ai le temps
+                
+#                ind_Current, tH_Current = dictLigne[i.idLignes[0]]
                 if i.listHoraires[typeHoraire].listHoraire[indice] == "-":
                     new_value = distances[current_busStop] + timedelta(seconds=6)
                     
@@ -136,12 +134,15 @@ class Reseau:
             busStops.append(current_busStop)
         
         ret = []
+        ret2 = []
         busStop = arrivee
         while precedents[busStop] is not None:
-            ret.append(busStop)
+            ret.append(busStop.name)
+            ret2.append(distances[busStop])
             busStop = precedents[busStop]
-        ret.append(depart)
-        return list(reversed(ret))
+        ret.append(depart.name)
+        ret2.append(distances[depart])
+        return (list(reversed(ret)),list(reversed(ret2)))
         
         
         
