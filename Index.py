@@ -5,7 +5,26 @@ from tkinter import Tk
 #!/usr/bin/python3
 #-*-coding:utf-8-*-
 
+# =============================================================================
+# Lien vers le git : https://github.com/MaxencePRSZ/Proj-631-Sibra
+# =============================================================================
+
+
+
 def openFile(file):
+    """Ouvre et trie les informations utiles dans le fichiers data entré 
+        en paramètre
+
+    Parameters
+    ----------
+    file : file
+        Un fichier qui contient les données qui nous interessent
+
+    Returns
+    -------
+    list
+        Liste contenant les données parsées
+    """
     try:
         with open(file, 'r') as f:
             content = f.read()
@@ -24,6 +43,18 @@ def openFile(file):
     return slited_content
 
 def dates2dic(dates):
+    """renseigne les dates passées en paramètres en un dictionnaire
+
+    Parameters
+    ----------
+    list : dates
+        Une liste des horaires qui ont été séparés précedemment
+
+    Returns
+    -------
+    dict
+        retourne un dictionnaire des dates
+    """
     dic = {}
     splitted_dates = dates.split("\n")
 #    print(splitted_dates)
@@ -34,15 +65,53 @@ def dates2dic(dates):
     return dic
 
 def parseBusStops(data):
+    """Parse le + comme un N pour plsu de facilité lors du traitement des données
+
+    Parameters
+    ----------
+    list : data
+        une liste contenant les noms des arrets séparé d'un N ou d'un +
+
+    Returns
+    -------
+    list
+        Liste des arrets de bus
+    """
     return data[0].replace(" + ", " N ").split(" N ")
 
 def fillHoraire(reseau, data):
+    """renseigne les horaires pour chaque arrets de bus
+
+    Parameters
+    ----------
+    reseau : reseau
+        Objet reseau qui est l'objet 'pere', qui correspond à la structure du 
+        projet
+    list : data
+        une liste contenant les noms des arrets séparé d'un N ou d'un +
+
+    Returns
+    -------
+    """
     for i in range(1, 6):
         if i == 3 :
             continue;
         reseau.fillHoraires(dates2dic(data[i]), i)
 
-def addLigneFromtxt(reseau, file): 
+def addLigneFromtxt(reseau, file):
+    """Ajoute les lignes du fichier passé en paramètre dans la structure reseau
+
+    Parameters
+    ----------
+    reseau : reseau
+        Objet reseau qui est l'objet 'pere', qui correspond à la structure du 
+        projet
+    file : file
+        Un fichier qui contient les données qui nous interessent
+
+    Returns
+    -------
+    """
     reseau.incrementCountLigne()
     numLigne = reseau.getCountLigne()
     data = openFile(file)
@@ -62,8 +131,8 @@ data_file_name2 = 'data/2_Piscine-Patinoire_Campus.txt'
 reseau = Reseau()
 addLigneFromtxt(reseau, data_file_name1)
 addLigneFromtxt(reseau, data_file_name2)
-#print(reseau.djikstra(reseau.listBusStop[6], reseau.listBusStop[9]))
-print(reseau.djikstraFastest(reseau.listBusStop[18], reseau.listBusStop[8], "10:00"))
+#print(reseau.djikstraShortest(reseau.listBusStop[4], reseau.listBusStop[21]))
+print(reseau.djikstraForemost(reseau.listBusStop[1], reseau.listBusStop[8], "10:00"))
 
 # =============================================================================
 #           INTERFACE UTILISATEUR

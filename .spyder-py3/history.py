@@ -62,3 +62,7 @@ runfile('E:/Cours/Semestre 6/Proj-631-Sibra/Index.py', wdir='E:/Cours/Semestre 6
 reseau.listBusStop[18].listHoraires[1]
 reseau.listBusStop[18].listHoraires[1].listHoraire
 runfile('E:/Cours/Semestre 6/Proj-631-Sibra/Index.py', wdir='E:/Cours/Semestre 6/Proj-631-Sibra')
+%clear
+runfile('E:/Cours/Semestre 6/Proj-631-Sibra/Index.py', wdir='E:/Cours/Semestre 6/Proj-631-Sibra')
+%clear
+runfile('E:/Cours/Semestre 6/Proj-631-Sibra/Index.py', wdir='E:/Cours/Semestre 6/Proj-631-Sibra')
