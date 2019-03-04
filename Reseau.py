@@ -73,6 +73,17 @@ class Reseau:
                 mini = value
                 busStop = key
         return (busStop, mini)
+    
+    def sensBus(self, busStop1, busStop2):
+        for i in self.listTrajet:
+            if i.busStop1 == busStop1 and i.busStop2 == busStop2:
+                return 0
+            if i.busStop2 == busStop1 and i.busStop1 == busStop2:
+                return 1
+        return -1
+    
+    def getLigneId(self, busStop1, busStop2):
+        return list(set(busStop1.idLignes).intersection(busStop2.idLignes))[0]
         
 # =============================================================================
 # https://dev.to/mxl/dijkstras-algorithm-in-python-algorithms-for-beginners-dkc
@@ -108,9 +119,13 @@ class Reseau:
     def djikstraFastest(self, depart, arrivee, heure):
         distances = {busStop: self.MAXTIME for busStop in self.listBusStop}
         precedents = {busStop: None for busStop in self.listBusStop}
+
+
         typeHoraire, indice = depart.findTypeHoraire(arrivee, heure)
-        dictLigne = dict({idLigne : (indice, typeHoraire) for idLigne in depart.idLignes})
+#        dictLigne = dict({idLigne : (indice, typeHoraire) for idLigne in depart.idLignes})
         distances[depart] = depart.listHoraires[typeHoraire].listHoraire[indice]
+        
+
         busStops = []
         
         while len(busStops) != len(distances):
@@ -121,19 +136,29 @@ class Reseau:
             for i in self.getNeighbors(current_busStop):
 #               Si on rencontre un horaire '-', on prétend que le bus y passera
 #               dans un certain temps - à mieux gérer si j'ai le temps
+                idLine = self.getLigneId(current_busStop, i)
+                tH_voisin = self.sensBus(current_busStop, i)
+                ind_voisin = current_busStop.listHoraires[tH_voisin].findIndice(distances[current_busStop])
+
+
                 if len(current_busStop.idLignes) > 1:
-                    for j in current_busStop.idLignes:
-                        if j not in list(dictLigne.keys()):
-                            th, ind = current_busStop.findTypeHoraire(arrivee, distances[current_busStop])
-                            dictLigne.update({j : (ind, th)})
+                    print(tH_voisin)
+                    print(current_busStop.name)
+                    tH_voisin = (idLine-1)*4 + tH_voisin
+                    print(tH_voisin)
+
+#                if len(current_busStop.idLignes) > 1:
+#                    for j in current_busStop.idLignes:
+#                        if j not in list(dictLigne.keys()):
+#                            th, ind = current_busStop.findTypeHoraire(arrivee, distances[current_busStop])
+#                            dictLigne.update({j : (ind, th)})
                             
-                ind_voisin, tH_voisin = dictLigne[i.idLignes[0]]
+#                ind_voisin, tH_voisin = dictLigne[i.idLignes[0]]
                 
-                if i.listHoraires[tH_voisin].listHoraire[ind_voisin] == "-":
-                    new_value = distances[current_busStop] + timedelta(seconds=6)
-                    
-                else:
-                    new_value = i.listHoraires[tH_voisin].listHoraire[ind_voisin]
+                while i.listHoraires[tH_voisin].listHoraire[ind_voisin] == "-":
+                    ind_voisin += 1
+
+                new_value = i.listHoraires[tH_voisin].listHoraire[ind_voisin]
                 if new_value < distances[i]:
                     distances[i] = new_value
                     precedents[i] = current_busStop
