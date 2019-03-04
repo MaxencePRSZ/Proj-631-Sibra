@@ -74,7 +74,7 @@ class Reseau:
         distances[depart] = 0
         busStops = self.listBusStop
         
-        while busStops:
+#        while busStops:
             
         
         
