@@ -119,13 +119,10 @@ class Reseau:
     def djikstraFastest(self, depart, arrivee, heure):
         distances = {busStop: self.MAXTIME for busStop in self.listBusStop}
         precedents = {busStop: None for busStop in self.listBusStop}
-
-
         typeHoraire, indice = depart.findTypeHoraire(arrivee, heure)
+        print(typeHoraire)
 #        dictLigne = dict({idLigne : (indice, typeHoraire) for idLigne in depart.idLignes})
         distances[depart] = depart.listHoraires[typeHoraire].listHoraire[indice]
-        
-
         busStops = []
         
         while len(busStops) != len(distances):
@@ -138,26 +135,14 @@ class Reseau:
 #               dans un certain temps - à mieux gérer si j'ai le temps
                 idLine = self.getLigneId(current_busStop, i)
                 tH_voisin = self.sensBus(current_busStop, i)
-                ind_voisin = current_busStop.listHoraires[tH_voisin].findIndice(distances[current_busStop])
+                ind_voisin = i.listHoraires[tH_voisin].findIndice(distances[current_busStop])
 
-
-                if len(current_busStop.idLignes) > 1:
-                    print(tH_voisin)
-                    print(current_busStop.name)
+                if len(i.idLignes) > 1:
                     tH_voisin = (idLine-1)*4 + tH_voisin
-                    print(tH_voisin)
 
-#                if len(current_busStop.idLignes) > 1:
-#                    for j in current_busStop.idLignes:
-#                        if j not in list(dictLigne.keys()):
-#                            th, ind = current_busStop.findTypeHoraire(arrivee, distances[current_busStop])
-#                            dictLigne.update({j : (ind, th)})
-                            
-#                ind_voisin, tH_voisin = dictLigne[i.idLignes[0]]
-                
                 while i.listHoraires[tH_voisin].listHoraire[ind_voisin] == "-":
                     ind_voisin += 1
-
+                
                 new_value = i.listHoraires[tH_voisin].listHoraire[ind_voisin]
                 if new_value < distances[i]:
                     distances[i] = new_value
@@ -165,10 +150,20 @@ class Reseau:
             busStops.append(current_busStop)
         
         ret = {}
+        busStopsDepart = []
         busStop = arrivee
         while precedents[busStop] is not None:
             ret.update({busStop.name : str(distances[busStop].time())})
             busStop = precedents[busStop]
+            busStopsDepart.append(busStop)
+            
+        idLine = self.getLigneId(depart, busStopsDepart[len(busStopsDepart)-2])
+        tH_depart = self.sensBus(depart, busStopsDepart[len(busStopsDepart)-2])
+        if len(i.idLignes) > 1:
+            tH_depart = (idLine-1)*4 + tH_voisin
+        ind_depart = depart.listHoraires[tH_depart].findIndice(heure)
+        distances[depart] = depart.listHoraires[tH_depart].listHoraire[ind_depart]
+        
         ret.update({depart.name : str(distances[depart].time())})
         return ret
         

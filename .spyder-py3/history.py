@@ -52,3 +52,13 @@ debugfile('E:/Cours/Semestre 6/Proj-631-Sibra/Index.py', wdir='E:/Cours/Semestre
 runfile('E:/Cours/Semestre 6/Proj-631-Sibra/Index.py', wdir='E:/Cours/Semestre 6/Proj-631-Sibra')
 runfile('E:/Cours/Semestre 6/Proj-631-Sibra/Reseau.py', wdir='E:/Cours/Semestre 6/Proj-631-Sibra')
 runfile('E:/Cours/Semestre 6/Proj-631-Sibra/Index.py', wdir='E:/Cours/Semestre 6/Proj-631-Sibra')
+runfile('E:/Cours/Semestre 6/Proj-631-Sibra/Index.py', wdir='E:/Cours/Semestre 6/Proj-631-Sibra')
+runfile('E:/Cours/Semestre 6/Proj-631-Sibra/Reseau.py', wdir='E:/Cours/Semestre 6/Proj-631-Sibra')
+runfile('E:/Cours/Semestre 6/Proj-631-Sibra/Index.py', wdir='E:/Cours/Semestre 6/Proj-631-Sibra')
+runfile('E:/Cours/Semestre 6/Proj-631-Sibra/Horaire.py', wdir='E:/Cours/Semestre 6/Proj-631-Sibra')
+runfile('E:/Cours/Semestre 6/Proj-631-Sibra/Index.py', wdir='E:/Cours/Semestre 6/Proj-631-Sibra')
+runfile('E:/Cours/Semestre 6/Proj-631-Sibra/Horaire.py', wdir='E:/Cours/Semestre 6/Proj-631-Sibra')
+runfile('E:/Cours/Semestre 6/Proj-631-Sibra/Index.py', wdir='E:/Cours/Semestre 6/Proj-631-Sibra')
+reseau.listBusStop[18].listHoraires[1]
+reseau.listBusStop[18].listHoraires[1].listHoraire
+runfile('E:/Cours/Semestre 6/Proj-631-Sibra/Index.py', wdir='E:/Cours/Semestre 6/Proj-631-Sibra')
