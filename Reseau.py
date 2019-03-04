@@ -169,9 +169,9 @@ class Reseau:
         list<busStop> : busStops
             liste des arrets qui ont été visité d'ores et deja
         Returns
-            tuple :
-                l'arret avec l'horaire minimum
         -------
+            tuple :
+                l'arret avec son horaire minimum
         """   
         mini, busStop = self.MAXTIME, None
         for key, value in dicTime.items():
@@ -195,11 +195,11 @@ class Reseau:
         BusStop  : busStop2
             second arret que le bus va visiter
         Returns
+        -------
             int :
                 0 si le bus est sur l'aller
                 1 si le bus est sur le retour
                -1 si les arrets ne sont pas connectés
-        -------
         """ 
         for i in self.listTrajet:
             if i.busStop1 == busStop1 and i.busStop2 == busStop2:
@@ -220,9 +220,9 @@ class Reseau:
         BusStop  : busStop2
             second arret que le bus va visiter
         Returns
+        -------
             int :
                 l'id de la ligne en commun sur les deux arrets
-        -------
         """ 
         return list(set(busStop1.idLignes).intersection(busStop2.idLignes))[0]
         
@@ -241,10 +241,10 @@ class Reseau:
         BusStop  : arrivee
             l'arret sur lequel on veut arriver
         Returns
+        -------
             list :
                 la liste des arrets que l'on doit traverser pour aller du départ
                 à l'arrivée (dans l'ordre)
-        -------
         """ 
         distances = {busStop: float("inf") for busStop in self.listBusStop}
         precedents = {busStop: None for busStop in self.listBusStop}
