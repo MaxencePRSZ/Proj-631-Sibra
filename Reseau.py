@@ -81,11 +81,7 @@ class Reseau:
         distances = {busStop: float("inf") for busStop in self.listBusStop}
         precedents = {busStop: None for busStop in self.listBusStop}
         distances[depart] = 0
-<<<<<<< HEAD
-        busStops = self.listBusStop
-        
-#        while busStops:
-=======
+
         busStops = self.listBusStop.copy()
         while busStops:
             current_busStop = min(busStops, key=lambda busStop: distances[busStop])
@@ -121,7 +117,6 @@ class Reseau:
             current_busStop, current_horaire = self.findMinDateTime(distances, busStops)
             if distances[current_busStop] == self.MAXTIME:
                 break
->>>>>>> c16814ebb488f7236d5ef0e76c1dcd86630f1c20
             
             for i in self.getNeighbors(current_busStop):
 #               Si on rencontre un horaire '-', on prétend que le bus y passera
